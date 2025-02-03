@@ -13,6 +13,7 @@ class ACryptRaiderGameMode : public AGameModeBase
 
 public:
 	ACryptRaiderGameMode();
+
 };
 
 

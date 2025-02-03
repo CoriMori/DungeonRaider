@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "DoorKey.h"
 
 // Sets default values for this component's properties
@@ -34,6 +33,7 @@ void UDoorKey::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 void UDoorKey::UnlockDoor()
 {
 	if (!CanUnlock()) return; // check if it can be unlocked
+	OnKeyCorrectDelegate.Broadcast();
 	isLocked = false; // set the door as unlocked
 	moverComp->SetShouldMove(true); // trigger the door movement
 	placedActor = nullptr; // reset the placed actor so we don't keep trying to unlock the door
@@ -81,4 +81,5 @@ bool UDoorKey::CheckDoor(AActor* doorToCheck)
 	UE_LOG(LogTemp, Error, TEXT("No door has been set."));
 	return false;
 }
+
 

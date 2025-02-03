@@ -7,6 +7,7 @@
 #include "Mover.h"
 #include "DoorKey.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnKeyCorrect);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class CRYPTRAIDER_API UDoorKey : public UActorComponent
@@ -17,9 +18,12 @@ public:
 	// Sets default values for this component's properties
 	UDoorKey();
 
+	UPROPERTY(BlueprintAssignable)
+	FOnKeyCorrect OnKeyCorrectDelegate;
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+
 
 public:	
 	// Called every frame
@@ -42,4 +46,5 @@ private:
 	void SetMover(UMover* mover); // sets the mover component from the door pntr -> Logs an error if the mover doesn't exsist
 	bool CanUnlock(); // checks if we can even unlock the door
 	bool CheckDoor(AActor* doorToCheck); // checks if the door passed in exsists -> Logs an error if it doesn't
+
 };

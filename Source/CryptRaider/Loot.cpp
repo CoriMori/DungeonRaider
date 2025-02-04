@@ -33,8 +33,12 @@ void ALoot::AssignScoreValue()
 {
 	if (!ScoreComponent) return;
 	if (!ScoreComponent->GetScore()) { // prevent us from overwritting any custom score values
-		int32 randomScore = FMath::RandRange(100, 1000);
+		int32 randomScore = FMath::RandRange(100, 500);
+		if (ActorHasTag("LowerDungeon")) {
+			randomScore = FMath::RandRange(500, 1000);
+		}
 		ScoreComponent->SetScore(randomScore);
+
 	}
 }
 

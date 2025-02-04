@@ -16,6 +16,7 @@ public:
 	// Sets default values for this component's properties
 	UScoreComponent();
 	int32 GetScore() const { return score; }
+	void SetScore(int32 Value) { score = Value; }
 
 protected:
 	// Called when the game starts

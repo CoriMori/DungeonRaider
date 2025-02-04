@@ -65,6 +65,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 	bool GetHasRifle();
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool bRotatingObject;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool bHoldingObject;
+
+	FVector2D LookAxisVector;
+
 protected:
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);

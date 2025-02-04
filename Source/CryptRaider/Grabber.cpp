@@ -25,7 +25,7 @@ void UGrabber::BeginPlay()
 void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	UpdateTargetLocation();
+	UpdateTargetLocationAndRotation();
 }
 
 //grab an object
@@ -37,9 +37,11 @@ void UGrabber::Grab()
 
 	if (GeomTrace(result)) {
 		UPrimitiveComponent* heldComp = result.GetComponent();
+		//DrawDebugSphere(GetWorld(), result.ImpactPoint, 5.0f, 16, FColor::Cyan, false, 5.0f);
 		heldComp->GetOwner()->Tags.Add("Grabbed");
 		heldComp->WakeAllRigidBodies();
 		GetPhysicsHandle()->GrabComponentAtLocationWithRotation(heldComp, NAME_None, result.ImpactPoint, GetComponentRotation());
+		GetOwningPlayer()->bHoldingObject = true;
 	}
 }
 
@@ -49,6 +51,7 @@ void UGrabber::Release()
 	GetPhysicsHandle()->GetGrabbedComponent()->GetOwner()->Tags.Remove("Grabbed");
 	GetPhysicsHandle()->GetGrabbedComponent()->WakeAllRigidBodies();
 	GetPhysicsHandle()->ReleaseComponent();
+	GetOwningPlayer()->bHoldingObject = false;
 }
 
 void UGrabber::Throw()
@@ -59,13 +62,26 @@ void UGrabber::Throw()
 	Release();
 }
 
-//update the grabbed objects location
-void UGrabber::UpdateTargetLocation()
-{
-	if (GetPhysicsHandle() == nullptr || GetPhysicsHandle()->GetGrabbedComponent() == nullptr) return;
 
-	FVector targetPos = GetComponentLocation() + GetForwardVector() * holdDist;
-	GetPhysicsHandle()->SetTargetLocationAndRotation(targetPos, GetComponentRotation());
+
+//update the grabbed objects location
+void UGrabber::UpdateTargetLocationAndRotation()
+{
+
+	if (GetPhysicsHandle() == nullptr || GetPhysicsHandle()->GetGrabbedComponent() == nullptr) return;
+	FRotator targetRot;
+	FVector targetPos;
+	if (GetOwningPlayer()->bRotatingObject) {
+		GetPhysicsHandle()->GetTargetLocationAndRotation(targetPos, targetRot); //putting targetPos in as a placeholder, it will be reassigned later
+		targetRot.Roll = GetOwningPlayer()->LookAxisVector.X + targetRot.Roll;
+		targetRot.Pitch = GetOwningPlayer()->LookAxisVector.Y + targetRot.Pitch;
+	}
+	else {
+		targetRot = GetComponentRotation();
+	}
+
+	targetPos = GetComponentLocation() + GetForwardVector() * holdDist;
+	GetPhysicsHandle()->SetTargetLocationAndRotation(targetPos, targetRot);
 }
 
 //fire a sphere trace to detect props
@@ -75,6 +91,8 @@ bool UGrabber::GeomTrace(FHitResult& outResult) const
 	FVector endPos = startPos + GetForwardVector() * grabDist;
 
 	FCollisionShape sphere = FCollisionShape::MakeSphere(grabRadius);
+	//DrawDebugSphere(GetWorld(), endPos, grabRadius, 16, FColor::Blue, true);
+	//DrawDebugLine(GetWorld(), startPos, endPos, FColor::Red, true);
 	return GetWorld()->SweepSingleByChannel(outResult, startPos, endPos,
 		FQuat::Identity, ECC_GameTraceChannel2, sphere);
 }
@@ -87,5 +105,10 @@ UPhysicsHandleComponent* UGrabber::GetPhysicsHandle() const
 	}
 
 	return result;
+}
+
+ACryptRaiderCharacter* UGrabber::GetOwningPlayer() const
+{
+	return Cast<ACryptRaiderCharacter>(GetOwner());
 }
 

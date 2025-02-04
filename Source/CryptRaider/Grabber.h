@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/SceneComponent.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
+#include "CryptRaiderCharacter.h"
 #include "Grabber.generated.h"
 
 
@@ -35,7 +36,8 @@ private:
 	UFUNCTION(BlueprintCallable)
 	void Throw();
 
-	void UpdateTargetLocation();
+
+	void UpdateTargetLocationAndRotation();
 	
 	bool GeomTrace(FHitResult& outResult) const;
 
@@ -52,5 +54,8 @@ private:
 	UPROPERTY(EditAnywhere, meta = (DisplayName = "Throw Force"))
 	float throwForce = 100.0f;
 
+
 	UPhysicsHandleComponent* GetPhysicsHandle() const;
+
+	ACryptRaiderCharacter* GetOwningPlayer() const;
 };

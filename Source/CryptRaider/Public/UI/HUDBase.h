@@ -26,7 +26,8 @@ public:
 	void OnScoreChanged(int32 Score);
 
 protected:
-
+	UPROPERTY(BlueprintReadOnly)
+	TObjectPtr<UWidgetBase> ScoreWidget;
 private:
-	UWidgetBase* ScoreWidget;
+
 };

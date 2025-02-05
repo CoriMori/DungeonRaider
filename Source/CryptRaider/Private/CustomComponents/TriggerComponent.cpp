@@ -1,0 +1,13 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "CustomComponents/TriggerComponent.h"
+
+UTriggerComponent::UTriggerComponent()
+{
+}
+
+void UTriggerComponent::BeginPlay()
+{
+	Super::BeginPlay();
+}

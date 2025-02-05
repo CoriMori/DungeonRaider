@@ -6,7 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "Mover.generated.h"
 
-
+//Component allows an object to move a certain distance
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class CRYPTRAIDER_API UMover : public UActorComponent
 {
@@ -28,14 +28,10 @@ public:
 
 private:
 	void Move(const float& deltaTime);
-
-	FVector startPos;
-
+	FVector startPos; 
 	UPROPERTY(EditAnywhere, meta = (DisplayName = "Move Offset"))
 	FVector moveOffset;
-
 	UPROPERTY(EditAnywhere, meta = (DisplayName = "Move Time"))
 	float moveTime;
-
 	bool shouldMove = false;
 };

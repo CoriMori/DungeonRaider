@@ -7,7 +7,7 @@
 ALoot::ALoot()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
 	SetRootComponent(StaticMeshComponent);
 
@@ -29,16 +29,16 @@ void ALoot::Tick(float DeltaTime)
 
 }
 
+//assign a random value for the loot if the score isn't already set
 void ALoot::AssignScoreValue()
 {
 	if (!ScoreComponent) return;
-	if (!ScoreComponent->GetScore()) { // prevent us from overwritting any custom score values
-		int32 randomScore = FMath::RandRange(100, 500);
-		if (ActorHasTag("LowerDungeon")) {
-			randomScore = FMath::RandRange(500, 1000);
-		}
-		ScoreComponent->SetScore(randomScore);
-
+	if (ScoreComponent->GetScore() != 0) return; // prevent us from overwritting any custom score values
+	
+	int32 randomScore = FMath::RandRange(100, 500);
+	if (ActorHasTag("LowerDungeon")) { // adjust the range for loot in the lower part of the dungeon
+		randomScore = FMath::RandRange(500, 1000);
 	}
+	ScoreComponent->SetScore(randomScore);
 }
 

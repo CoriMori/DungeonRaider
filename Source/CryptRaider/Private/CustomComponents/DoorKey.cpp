@@ -46,7 +46,7 @@ void UDoorKey::CheckKey(AActor* placedObj)
 	placedActor = placedObj;
 }
 
-//sets the mover componenet from the door reference
+//sets the mover componenet from the door reference -> sends out an error log if the mover component is missing from the door
 void UDoorKey::SetMover(UMover* mover)
 {
 	if (mover != nullptr) { 
@@ -73,7 +73,7 @@ bool UDoorKey::CanUnlock()
 	return true;
 }
 
-//check if we have a valid door
+//check if we have a valid door -> sends out an error log if it hasn't been assigned
 bool UDoorKey::CheckDoor(AActor* doorToCheck) const
 {
 	if (doorToCheck != nullptr) return true;

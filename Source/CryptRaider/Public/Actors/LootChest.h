@@ -5,10 +5,12 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "CustomComponents/ScoreComponent.h"
+#include "Components/BoxComponent.h"
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "LootChest.generated.h"
 
+//class for a chest that can accept a piece of loot -> triggers scoring updates and particle effects
 UCLASS()
 class CRYPTRAIDER_API ALootChest : public AActor
 {
@@ -22,6 +24,11 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	/* Instead of spawning particles,
+	* could attach a niagara system component to the actor
+	* and play the particle system.
+	* But this works too. Inconsequential for a project of this size.
+	*/
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<UNiagaraSystem> particleSystemAsset;
 
@@ -33,7 +40,11 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	AActor* placedActor; //actor placed in the chest
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UStaticMeshComponent> StaticMeshComponent;
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UBoxComponent> BoxComponent;
+	TObjectPtr<AActor> placedActor; //actor placed in the chest
 	
 	UFUNCTION(BlueprintCallable)
 	void CheckLoot(AActor* placedObj);

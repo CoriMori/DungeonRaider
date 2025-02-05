@@ -8,9 +8,7 @@
 #include "UI/WidgetBase.h"
 #include "HUDBase.generated.h"
 
-/**
- * 
- */
+//Basic HUD class -> Used in RaiderPlayerState to update Score value
 UCLASS()
 class CRYPTRAIDER_API AHUDBase : public AHUD
 {

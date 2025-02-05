@@ -18,13 +18,15 @@ public:
 	// Sets default values for this component's properties
 	UDoorKey();
 
+	/*event delegate->assigned in blueprints as a workaround for a BlueprintImplementableEvent
+	* Allows for visual effects to occur as a result of the key being correct
+	* Broadcasted in UnlockDoor()
+	*/
 	UPROPERTY(BlueprintAssignable)
-	FOnKeyCorrect OnKeyCorrectDelegate;
+	FOnKeyCorrect OnKeyCorrectDelegate; 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
-
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -35,8 +37,8 @@ private:
 	AActor* door; // actual door that will be effected by this component
 	UPROPERTY(EditAnywhere, meta = (DisplayName = "Key"))
 	FName doorKey; // name of the key -> key actor needs to have a tag that matches whatever this is set as
-	AActor* placedActor; // reference to the actor that we're trying to check
-	UMover* moverComp;	// mover component -> used in UnlockDoor()
+	TObjectPtr<AActor> placedActor; // reference to the actor that we're trying to check
+	TObjectPtr<UMover> moverComp;	// mover component -> used in UnlockDoor()
 	bool isLocked = true; // tracks the locked status of the door
 
 	//Functions

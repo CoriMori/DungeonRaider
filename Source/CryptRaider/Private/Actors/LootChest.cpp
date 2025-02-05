@@ -8,6 +8,11 @@ ALootChest::ALootChest()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
+	SetRootComponent(StaticMeshComponent);
+
+	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
+	BoxComponent->SetupAttachment(GetRootComponent());
 
 }
 
@@ -42,7 +47,7 @@ void ALootChest::CalculateScore()
 
 	playerState->SetPlayerScore(playerScore + actorScore); //update the total score
 
-	//play particles
+	//spawn particles
 	if(!IsValid(particleComponent)){
 		particleComponent = UNiagaraFunctionLibrary::SpawnSystemAttached(
 			particleSystemAsset,
@@ -66,6 +71,7 @@ void ALootChest::CalculateScore()
 	placedActor = nullptr;
 }
 
+//Start checking the loot that was placed in the chest
 void ALootChest::CheckLoot(AActor* placedObj)
 {
 	placedActor = placedObj;

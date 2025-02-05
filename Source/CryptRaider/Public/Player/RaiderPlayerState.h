@@ -6,9 +6,7 @@
 #include "GameFramework/PlayerState.h"
 #include "RaiderPlayerState.generated.h"
 
-/**
- * 
- */
+//Basic Playerstate class -> holds player score and updates the HUD when the score is changed
 UCLASS()
 class CRYPTRAIDER_API ARaiderPlayerState : public APlayerState
 {

@@ -8,6 +8,7 @@ ARaiderPlayerState::ARaiderPlayerState()
 {
 }
 
+//Update player score value and then update the HUD
 void ARaiderPlayerState::SetPlayerScore(int32 newScore)
 {
 	playerScore = newScore;

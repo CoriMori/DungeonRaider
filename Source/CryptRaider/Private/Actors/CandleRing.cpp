@@ -7,7 +7,9 @@
 ACandleRing::ACandleRing()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
+	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
+	SetRootComponent(StaticMeshComponent);
 
 }
 
@@ -15,14 +17,27 @@ ACandleRing::ACandleRing()
 void ACandleRing::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	SpawnCandles();
 }
 
-// Called every frame
-void ACandleRing::Tick(float DeltaTime)
+//spawn candles in a circle
+void ACandleRing::SpawnCandles()
 {
-	Super::Tick(DeltaTime);
+	TArray<FVector> candleLocations = GetCandleLocation(candleQuantity, circleRadius);
+	for (int32 i = 0; i < candleLocations.Num(); i++) {
+		TSubclassOf<AActor> candleType = GetRandomCandleVariant();
+		AActor* candle = GetWorld()->SpawnActor<AActor>(candleType, candleLocations[i], FRotator{}, FActorSpawnParameters{});
+		candle->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::KeepWorldTransform); // attach to the root compoenent
+	}
+}
 
+//get a random class from the Candle Variations array
+TSubclassOf<AActor> ACandleRing::GetRandomCandleVariant()
+{
+	int32 randIndex = FMath::RandRange(0, CandleVariations.Num() - 1);
+
+	return CandleVariations[randIndex];
 }
 
 //returns positions around a cirlce

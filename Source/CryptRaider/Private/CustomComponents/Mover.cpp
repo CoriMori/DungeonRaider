@@ -30,9 +30,7 @@ void UMover::Move(const float& deltaTime)
 void UMover::BeginPlay()
 {
 	Super::BeginPlay();
-	startPos = GetOwner()->GetActorLocation();
-	// ...
-	
+	startPos = GetOwner()->GetActorLocation();	
 }
 
 

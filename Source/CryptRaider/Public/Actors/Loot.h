@@ -7,6 +7,10 @@
 #include "GameFramework/Actor.h"
 #include "Loot.generated.h"
 
+/*Actor with a score component and a static mesh root
+* Can be picked up and put in the loot chest to be scored
+* Static mesh swapped out with whatever asset the loot should be
+*/
 UCLASS()
 class CRYPTRAIDER_API ALoot : public AActor
 {

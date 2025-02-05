@@ -8,7 +8,16 @@ ASkeletonKey::ASkeletonKey()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
+	SetRootComponent(StaticMeshComponent);
+	
+	SplinePath = CreateDefaultSubobject<USplineComponent>(TEXT("SplinePath"));
+	SplinePath->SetupAttachment(GetRootComponent());
 
+	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
+	BoxComponent->SetupAttachment(GetRootComponent());
+
+	DoorKeyComponent = CreateDefaultSubobject<UDoorKey>(TEXT("DoorKeyComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -30,9 +39,6 @@ void ASkeletonKey::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	headTimeline.TickTimeline(DeltaTime);
-	if (headTimeline.IsPlaying()) {
-		GEngine->AddOnScreenDebugMessage(-1, 0.0f, FColor::Green, TEXT("Playing"));
-	}
 }
 
 void ASkeletonKey::StartKeyTimeline()

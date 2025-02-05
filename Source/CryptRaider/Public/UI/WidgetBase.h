@@ -7,6 +7,7 @@
 #include "Blueprint/UserWidget.h"
 #include "WidgetBase.generated.h"
 
+//Widget class requring a score text block -> main widget for the project
 UCLASS()
 class CRYPTRAIDER_API UWidgetBase : public UUserWidget
 {
@@ -18,8 +19,6 @@ public:
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	UTextBlock* TXTScore;
-	void OnScoreChanged(int32 Score);
-
-
+	TObjectPtr<UTextBlock> TXTScore;
+	void OnScoreChanged(int32 Score); //handle what happens when the score changes
 };

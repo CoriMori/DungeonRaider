@@ -6,7 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "ScoreComponent.generated.h"
 
-//component just holds a score value that can be changed in blueprints
+//component just holds a score value -> LootChest will look for this component to determine if it's a scoreable object
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class CRYPTRAIDER_API UScoreComponent : public UActorComponent
 {
@@ -15,6 +15,7 @@ class CRYPTRAIDER_API UScoreComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UScoreComponent();
+
 	int32 GetScore() const { return score; }
 	void SetScore(int32 Value) { score = Value; }
 

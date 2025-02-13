@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "CustomComponents/ScoreComponent.h"
+#include "CustomComponents/AudioPlayer.h"
 #include "GameFramework/Actor.h"
 #include "Loot.generated.h"
 
@@ -20,6 +21,13 @@ public:
 	// Sets default values for this actor's properties
 	ALoot();
 
+	UAudioPlayer* GetAudioPlayer() const { return AudioPlayerComponent; }
+
+	/** called when projectile hits something */
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -33,8 +41,15 @@ private:
 	TObjectPtr<UScoreComponent> ScoreComponent;
 
 	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UAudioPlayer> AudioPlayerComponent;
+
+	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UStaticMeshComponent> StaticMeshComponent;
 
 	void AssignScoreValue();
+
+	void CheckOnGround();
+
+	bool WasPickedUp = false;
 
 };

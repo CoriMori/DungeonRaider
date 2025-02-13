@@ -2,6 +2,7 @@
 
 
 #include "CustomComponents/Grabber.h"
+#include "Actors/Loot.h"
 
 // Sets default values for this component's properties
 UGrabber::UGrabber()
@@ -36,6 +37,11 @@ void UGrabber::Grab()
 	FHitResult result;
 	if (!GeomTrace(result)) return; //do nothing if we didn't hit anything
 	
+	//try to play pick up sound
+	UAudioPlayer* AudioPlayer = result.GetActor()->GetComponentByClass<UAudioPlayer>();
+	if (AudioPlayer != nullptr) {
+		AudioPlayer->PlayPickupSound();
+	}
 	UPrimitiveComponent* heldComp = result.GetComponent(); // get the component we hit
 	heldComp->GetOwner()->Tags.Add("Grabbed"); // assign the grabbed tag to the components owner
 	heldComp->WakeAllRigidBodies(); // wake up the rigid bodies in case they went to sleep

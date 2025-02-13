@@ -9,6 +9,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "Engine/LocalPlayer.h"
+#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -41,6 +42,8 @@ void ACryptRaiderCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+
+	PlayAmbience();
 
 	// Add Input Mapping Context
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
@@ -84,6 +87,11 @@ void ACryptRaiderCharacter::Move(const FInputActionValue& Value)
 
 	if (Controller != nullptr)
 	{
+		if (Footsteps != nullptr && !IsSoundPlaying) {
+			IsSoundPlaying = true;
+			FTimerHandle FootstepsTimerHandle;
+			GetWorldTimerManager().SetTimer(FootstepsTimerHandle, this, &ACryptRaiderCharacter::PlayFootsteps, FootstepDelay);
+		}
 		// add movement 
 		AddMovementInput(GetActorForwardVector(), MovementVector.Y);
 		AddMovementInput(GetActorRightVector(), MovementVector.X);
@@ -103,5 +111,22 @@ void ACryptRaiderCharacter::Look(const FInputActionValue& Value)
 		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
+	}
+}
+
+void ACryptRaiderCharacter::PlayAmbience()
+{
+	if (Ambience.Num() == 0) return;
+	for (USoundBase* audio : Ambience) {
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), audio, GetActorLocation());
+	}
+}
+
+void ACryptRaiderCharacter::PlayFootsteps()
+{
+	float Velocity = GetVelocity().Length();
+	if (Velocity > 0.0f) {
+		IsSoundPlaying = false;
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), Footsteps, GetActorLocation());
 	}
 }

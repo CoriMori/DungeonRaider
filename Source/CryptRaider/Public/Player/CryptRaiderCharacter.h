@@ -40,6 +40,12 @@ class ACryptRaiderCharacter : public ACharacter
 	/** Move Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	UInputAction* MoveAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "SFX", meta = (AllowPrivateAccess = "true"))
+	USoundBase* Footsteps;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "SFX", meta = (AllowPrivateAccess = "true"))
+	TArray<USoundBase*> Ambience;
 	
 public:
 	ACryptRaiderCharacter();
@@ -50,7 +56,7 @@ protected:
 public:
 		
 	/** Look Input Action */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	class UInputAction* LookAction;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
@@ -58,6 +64,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	bool bHoldingObject;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SFX")
+	float FootstepDelay = 0.2f;
 
 	FVector2D LookAxisVector;
 
@@ -68,6 +77,11 @@ protected:
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 
+	void PlayAmbience();
+
+	void PlayFootsteps();
+
+	bool IsSoundPlaying = false;
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;

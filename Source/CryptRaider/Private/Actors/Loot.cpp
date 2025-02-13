@@ -11,8 +11,19 @@ ALoot::ALoot()
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
 	SetRootComponent(StaticMeshComponent);
 
+	StaticMeshComponent->OnComponentHit.AddDynamic(this, &ALoot::OnHit);		// set up a notification for when this component hits something blocking
 	ScoreComponent = CreateDefaultSubobject<UScoreComponent>(TEXT("ScoreComponent"));
 
+	AudioPlayerComponent = CreateDefaultSubobject<UAudioPlayer>(TEXT("AudioPlayerComponent"));
+
+}
+
+void ALoot::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	if (WasPickedUp) {
+		CheckOnGround();
+		AudioPlayerComponent->PlayDropSound();
+	}
 }
 
 // Called when the game starts or when spawned
@@ -40,5 +51,26 @@ void ALoot::AssignScoreValue()
 		randomScore = FMath::RandRange(500, 1000);
 	}
 	ScoreComponent->SetScore(randomScore);
+}
+
+void ALoot::CheckOnGround()
+{
+	//calculate start and end positions for the trace
+	FVector startPos = GetActorLocation();
+	FVector endPos = startPos + FVector(0.0f, 0.0f, 1.0f) * 100.0f;
+
+	//send the trace out and return the results
+	FHitResult result;
+	GetWorld()->LineTraceSingleByChannel(result, startPos, endPos, ECollisionChannel::ECC_WorldStatic);
+
+	DrawDebugLine(GetWorld(), startPos, endPos, FColor::Cyan, true);
+	FString resultMsg = result.bBlockingHit ? "Blocking hit True" : "Blocking hit False";
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, FString::Printf(TEXT("Result: %s"), *resultMsg));
+	if (!result.bBlockingHit) {
+		WasPickedUp = true;
+	}
+	else {
+		WasPickedUp = false;
+	}
 }
 

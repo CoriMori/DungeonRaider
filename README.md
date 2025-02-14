@@ -1,7 +1,8 @@
-# Dungeon Raider
-Dungeon Raider (also known as Crypt Raiders) is one of the projects associated with GameDev TV's Unreal Engine C++ course.
+# Dungeon Raiders
+Dungeon Raiders (also known as Crypt Raiders) is one of the projects associated with GameDev TV's Unreal Engine C++ course.
 This is my own spin on the project, featuring a single mid-sized level with plenty of loot for players to interact with.
-I also added in some additional mechanics; throwing and rotating held objects, and a scoring system.
+I also added in some sound and additional mechanics; throwing and rotating held objects, and a scoring system.
+This project was made in Unreal Engine 5.3.
 
 ## Level Design
 This dungeon was designed using a combination of the Hub-and-Spoke and Ring layouts to keep things fairly linear, but still allow for some exploration.

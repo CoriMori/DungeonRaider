@@ -92,6 +92,7 @@ void ACryptRaiderCharacter::Move(const FInputActionValue& Value)
 			FTimerHandle FootstepsTimerHandle;
 			GetWorldTimerManager().SetTimer(FootstepsTimerHandle, this, &ACryptRaiderCharacter::PlayFootsteps, FootstepDelay);
 		}
+
 		// add movement 
 		AddMovementInput(GetActorForwardVector(), MovementVector.Y);
 		AddMovementInput(GetActorRightVector(), MovementVector.X);
@@ -128,5 +129,8 @@ void ACryptRaiderCharacter::PlayFootsteps()
 	if (Velocity > 0.0f) {
 		IsSoundPlaying = false;
 		UGameplayStatics::PlaySoundAtLocation(GetWorld(), Footsteps, GetActorLocation());
+	}
+	if (Velocity == 0) {
+		IsSoundPlaying = false;
 	}
 }

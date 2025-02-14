@@ -2,6 +2,7 @@
 
 #include "Actors/LootChest.h"
 #include "Player/RaiderPlayerState.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ALootChest::ALootChest()
@@ -47,6 +48,8 @@ void ALootChest::CalculateScore()
 
 	playerState->SetPlayerScore(playerScore + actorScore); //update the total score
 
+	PlayRewardSFX();
+
 	//spawn particles
 	if(!IsValid(particleComponent)){
 		particleComponent = UNiagaraFunctionLibrary::SpawnSystemAttached(
@@ -69,6 +72,13 @@ void ALootChest::CalculateScore()
 	placedActor->SetActorHiddenInGame(true);
 	placedActor->Destroy();
 	placedActor = nullptr;
+}
+
+void ALootChest::PlayRewardSFX()
+{
+	if (RewardSFX != nullptr) {
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), RewardSFX, GetActorLocation());
+	}
 }
 
 //Start checking the loot that was placed in the chest

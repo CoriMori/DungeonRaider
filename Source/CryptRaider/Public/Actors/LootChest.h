@@ -45,7 +45,12 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UBoxComponent> BoxComponent;
 	TObjectPtr<AActor> placedActor; //actor placed in the chest
-	
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "SFX", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USoundBase> RewardSFX;
+
+	void PlayRewardSFX();
+
 	UFUNCTION(BlueprintCallable)
 	void CheckLoot(AActor* placedObj);
 	void CalculateScore();

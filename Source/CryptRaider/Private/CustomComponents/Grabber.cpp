@@ -40,7 +40,7 @@ void UGrabber::Grab()
 	//try to play pick up sound
 	UAudioPlayer* AudioPlayer = result.GetActor()->GetComponentByClass<UAudioPlayer>();
 	if (AudioPlayer != nullptr) {
-		AudioPlayer->PlayPickupSound();
+		AudioPlayer->OnPickedUp.Broadcast();
 	}
 	UPrimitiveComponent* heldComp = result.GetComponent(); // get the component we hit
 	heldComp->GetOwner()->Tags.Add("Grabbed"); // assign the grabbed tag to the components owner
